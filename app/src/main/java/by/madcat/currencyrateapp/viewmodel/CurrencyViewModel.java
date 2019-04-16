@@ -7,29 +7,33 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
-import by.madcat.currencyrateapp.datarepository.CurrenciesRepository;
-import by.madcat.currencyrateapp.datarepository.Currency;
+import by.madcat.currencyrateapp.repositories.CurrenciesRepository;
+import by.madcat.currencyrateapp.common.Currency;
 import by.madcat.currencyrateapp.loadtask.CurrencyLoadAsyncTask;
 
 public class CurrencyViewModel extends AndroidViewModel {
 
-    private CurrenciesRepository repository = CurrenciesRepository.getInstance();
-
     private LiveData<List<Currency>> currencyLiveData;
+    private CurrenciesRepository currenciesRepository;
+    private boolean dataLoaded;
 
     public CurrencyViewModel(@NonNull Application application) {
         super(application);
 
-        currencyLiveData = repository.getData();
-        loadData();
+        currenciesRepository = CurrenciesRepository.getInstance();
+        currencyLiveData = currenciesRepository.getCurrencyData();
+        currenciesRepository.setDataLoaded(false);
     }
 
-    public LiveData<List<Currency>> getData(){
+    public LiveData<List<Currency>> getCurrenciesData(){
+        if(!currenciesRepository.isDataLoaded())
+            loadData();
+
         return currencyLiveData;
     }
 
     private void loadData(){
-        CurrencyLoadAsyncTask t = new CurrencyLoadAsyncTask();
+        CurrencyLoadAsyncTask t = new CurrencyLoadAsyncTask(getApplication());
         t.execute();
     }
 }

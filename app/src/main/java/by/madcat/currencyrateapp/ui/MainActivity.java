@@ -4,25 +4,30 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import by.madcat.currencyrateapp.R;
-import by.madcat.currencyrateapp.datarepository.Currency;
+import by.madcat.currencyrateapp.common.Currency;
 import by.madcat.currencyrateapp.viewmodel.CurrencyViewModel;
+import by.madcat.currencyrateapp.viewmodel.MessagesViewModel;
 
 public class MainActivity extends AppCompatActivity {
-
-    private CurrencyViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        viewModel = ViewModelProviders.of(this).get(CurrencyViewModel.class);
-        viewModel.getData().observe(this, currencies -> {
+        CurrencyViewModel currenciesViewModel = ViewModelProviders.of(this).get(CurrencyViewModel.class);
+        currenciesViewModel.getCurrenciesData().observe(this, currencies -> {
             for (Currency currency:currencies) {
                 Log.d("test", currency.toString());
             }
+        });
+
+        MessagesViewModel messagesViewModel = ViewModelProviders.of(this).get(MessagesViewModel.class);
+        messagesViewModel.getMessageData().observe(this, message -> {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         });
     }
 }

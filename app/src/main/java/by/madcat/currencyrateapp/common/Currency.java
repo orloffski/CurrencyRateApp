@@ -1,4 +1,4 @@
-package by.madcat.currencyrateapp.datarepository;
+package by.madcat.currencyrateapp.common;
 
 public class Currency {
 
