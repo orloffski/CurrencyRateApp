@@ -50,7 +50,7 @@ public class CurrencyLoadAsyncTask extends AsyncTask<Void, Void, Void> {
             currenciesRepository.addCurrency(currency);
 
             try {
-                Thread.sleep(1500);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 Log.d("test", e.getMessage());
                 e.printStackTrace();
