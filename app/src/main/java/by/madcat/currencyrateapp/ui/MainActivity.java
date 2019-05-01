@@ -11,7 +11,6 @@ import android.widget.Toast;
 import by.madcat.currencyrateapp.R;
 import by.madcat.currencyrateapp.recyclerviews.MainRecyclerViewAdapter;
 import by.madcat.currencyrateapp.viewmodel.CurrencyViewModel;
-import by.madcat.currencyrateapp.viewmodel.MessagesViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,8 +28,7 @@ public class MainActivity extends AppCompatActivity {
             adapter.setData(currencies);
         });
 
-        MessagesViewModel messagesViewModel = ViewModelProviders.of(this).get(MessagesViewModel.class);
-        messagesViewModel.getMessageData().observe(this, message -> {
+        currenciesViewModel.getMessageData().observe(this, message -> {
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         });
 

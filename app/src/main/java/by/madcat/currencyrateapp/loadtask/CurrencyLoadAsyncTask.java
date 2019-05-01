@@ -19,13 +19,26 @@ public class CurrencyLoadAsyncTask extends AsyncTask<Void, Void, Void> {
     private String url_path;
     private CurrenciesRepository currenciesRepository;
 
-    public CurrencyLoadAsyncTask(Context context) {
+    private static CurrencyLoadAsyncTask instance;
+
+    public static Void runCurrencyLoadAsyncTask(Context context){
+        if(instance == null) {
+            instance = new CurrencyLoadAsyncTask(context);
+            instance.execute();
+        }
+
+        return null;
+    }
+
+    private CurrencyLoadAsyncTask(Context context) {
         this.context = context;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+
+        Log.d("test", "task run");
 
         url_path = CurrencyAppConstants.URL_PATH;
         currenciesRepository = CurrenciesRepository.getInstance();
@@ -42,9 +55,10 @@ public class CurrencyLoadAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... voids) {
 
+        if(isCancelled())
+            return null;
+
         for(int i = 1; i <= 10; i++){
-            if(isCancelled())
-                return null;
 
             Currency currency = new Currency(i, true, "Code; " + i);
             currenciesRepository.addCurrency(currency);
