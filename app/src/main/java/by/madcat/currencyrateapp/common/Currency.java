@@ -7,6 +7,11 @@ public class Currency {
     private String CurrencyCode;
     private String lastDate;
     private String prevDate;
+    private String CurrencyDescription;
+    private String CurrencyLastRate;
+    private String CurrencyPrevRate;
+
+    public Currency(){}
 
     public Currency(int position, boolean include, String currencyCode) {
         this.position = position;
@@ -54,12 +59,41 @@ public class Currency {
         this.prevDate = prevDate;
     }
 
+    public String getCurrencyDescription() {
+        return CurrencyDescription;
+    }
+
+    public void setCurrencyDescription(String currencyDescription) {
+        CurrencyDescription = currencyDescription;
+    }
+
+    public String getCurrencyLastRate() {
+        return CurrencyLastRate;
+    }
+
+    public void setCurrencyLastRate(String currencyLastRate) {
+        CurrencyLastRate = currencyLastRate;
+    }
+
+    public String getCurrencyPrevRate() {
+        return CurrencyPrevRate;
+    }
+
+    public void setCurrencyPrevRate(String currencyPrevRate) {
+        CurrencyPrevRate = currencyPrevRate;
+    }
+
     @Override
     public String toString() {
         return "Currency{" +
                 "position=" + position +
                 ", include=" + include +
                 ", CurrencyCode='" + CurrencyCode + '\'' +
+                ", lastDate='" + lastDate + '\'' +
+                ", prevDate='" + prevDate + '\'' +
+                ", CurrencyDescription='" + CurrencyDescription + '\'' +
+                ", CurrencyLastRate='" + CurrencyLastRate + '\'' +
+                ", CurrencyPrevRate='" + CurrencyPrevRate + '\'' +
                 '}';
     }
 }

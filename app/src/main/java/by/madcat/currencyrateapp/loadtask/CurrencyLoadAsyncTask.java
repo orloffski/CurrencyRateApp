@@ -3,12 +3,16 @@ package by.madcat.currencyrateapp.loadtask;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
+
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.util.List;
 
 import by.madcat.currencyrateapp.common.AppUtilities;
-import by.madcat.currencyrateapp.repositories.CurrenciesRepository;
 import by.madcat.currencyrateapp.common.Currency;
-import by.madcat.currencyrateapp.common.CurrencyAppConstants;
+import by.madcat.currencyrateapp.common.GetCurrencyData;
+import by.madcat.currencyrateapp.repositories.CurrenciesRepository;
 import by.madcat.currencyrateapp.repositories.MessagesRepository;
 
 public class CurrencyLoadAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -16,10 +20,10 @@ public class CurrencyLoadAsyncTask extends AsyncTask<Void, Void, Void> {
     @SuppressLint("StaticFieldLeak")
     private Context context;
 
-    private String url_path;
-    private CurrenciesRepository currenciesRepository;
-
     private static CurrencyLoadAsyncTask instance;
+
+    private List<Currency> currenciesLast;
+    private List<Currency> currenciesPrev;
 
     public static Void runCurrencyLoadAsyncTask(Context context){
         if(instance == null) {
@@ -38,15 +42,9 @@ public class CurrencyLoadAsyncTask extends AsyncTask<Void, Void, Void> {
     protected void onPreExecute() {
         super.onPreExecute();
 
-        Log.d("test", "task run");
-
-        url_path = CurrencyAppConstants.URL_PATH;
-        currenciesRepository = CurrenciesRepository.getInstance();
-        MessagesRepository messagesRepository = MessagesRepository.getInstance();
-
         if(!AppUtilities.isNetworkAvailableAndConnected(context)) {
-            messagesRepository.updateMessage("Internet not connected");
-            currenciesRepository.setDataLoaded(false);
+            MessagesRepository.getInstance().updateMessage("Internet not connected");
+            CurrenciesRepository.getInstance().setDataLoaded(false);
 
             this.cancel(false);
         }
@@ -58,20 +56,13 @@ public class CurrencyLoadAsyncTask extends AsyncTask<Void, Void, Void> {
         if(isCancelled())
             return null;
 
-        for(int i = 1; i <= 100; i++){
-
-            Currency currency = new Currency(i, true, "Code; " + i);
-            currenciesRepository.addCurrency(currency);
-
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                Log.d("test", e.getMessage());
-                e.printStackTrace();
-            }
+        try {
+            loadCurrencies();
+        } catch (IOException | XmlPullParserException e) {
+            MessagesRepository.getInstance().updateMessage(e.getMessage());
         }
 
-        currenciesRepository.setDataLoaded(true);
+        CurrenciesRepository.getInstance().setDataLoaded(true);
 
         return null;
     }
@@ -81,5 +72,21 @@ public class CurrencyLoadAsyncTask extends AsyncTask<Void, Void, Void> {
         super.onCancelled();
 
         context = null;
+    }
+
+    private void loadCurrencies() throws IOException, XmlPullParserException {
+        int i = 0;
+        List<Currency> currencyLast = null;
+        List<Currency> currencyPrev = null;
+
+        while(currencyLast == null){
+            currencyLast = GetCurrencyData.getData(AppUtilities.getDateFromInterval(i));
+            i--;
+        }
+
+        while(currencyPrev == null){
+            currencyPrev = GetCurrencyData.getData(AppUtilities.getDateFromInterval(i));
+            i--;
+        }
     }
 }
