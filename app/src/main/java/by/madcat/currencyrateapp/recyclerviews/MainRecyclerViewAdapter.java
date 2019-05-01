@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +14,7 @@ import java.util.List;
 import by.madcat.currencyrateapp.R;
 import by.madcat.currencyrateapp.common.Currency;
 
-public class MainRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-    private static final int TYPE_HEADER = 0;
-    private static final int TYPE_ITEM = 1;
+public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainCyrrencyItemViewHolder> {
 
     private List<Currency> data;
     private Context context;
@@ -31,44 +27,19 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(viewType == TYPE_ITEM) {
-            View itemView = layoutInflater.inflate(R.layout.currency_item, parent, false);
-            return new MainCyrrencyItemViewHolder(itemView);
-        }else if(viewType == TYPE_HEADER){
-            View headerView = layoutInflater.inflate(R.layout.currency_header, parent, false);
-            return new MainCurrencyHeaderViewHolder(headerView);
-        }
-        return null;
+    public MainCyrrencyItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = layoutInflater.inflate(R.layout.currency_item, parent, false);
+        return new MainCyrrencyItemViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int i) {
-        if(holder instanceof MainCyrrencyItemViewHolder)
-            ((MainCyrrencyItemViewHolder)holder).bind(data.get(i - 1));
-        else if(holder instanceof  MainCurrencyHeaderViewHolder)
-            ((MainCurrencyHeaderViewHolder)holder).bind(data.get(0));
+    public void onBindViewHolder(@NonNull MainCyrrencyItemViewHolder holder, int i) {
+        holder.bind(data.get(i));
     }
 
     @Override
     public int getItemCount() {
-        return data.size() + 1;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if (isPositionHeader(position))
-            return TYPE_HEADER;
-
-        return TYPE_ITEM;
-    }
-
-    private boolean isPositionHeader(int position) {
-        return position == 0;
-    }
-
-    private Currency getItem(int position) {
-        return data.get(position);
+        return data.size();
     }
 
     public void setData(List<Currency> newData) {

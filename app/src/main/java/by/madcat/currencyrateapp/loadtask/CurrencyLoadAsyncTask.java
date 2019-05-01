@@ -58,7 +58,7 @@ public class CurrencyLoadAsyncTask extends AsyncTask<Void, Void, Void> {
         if(isCancelled())
             return null;
 
-        for(int i = 1; i <= 10; i++){
+        for(int i = 1; i <= 100; i++){
 
             Currency currency = new Currency(i, true, "Code; " + i);
             currenciesRepository.addCurrency(currency);
