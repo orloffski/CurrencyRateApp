@@ -5,6 +5,8 @@ public class Currency {
     private int position;
     private boolean include;
     private String CurrencyCode;
+    private String lastDate;
+    private String prevDate;
 
     public Currency(int position, boolean include, String currencyCode) {
         this.position = position;
@@ -34,6 +36,22 @@ public class Currency {
 
     public void setCurrencyCode(String currencyCode) {
         CurrencyCode = currencyCode;
+    }
+
+    public String getLastDate() {
+        return lastDate;
+    }
+
+    public void setLastDate(String lastDate) {
+        this.lastDate = lastDate;
+    }
+
+    public String getPrevDate() {
+        return prevDate;
+    }
+
+    public void setPrevDate(String prevDate) {
+        this.prevDate = prevDate;
     }
 
     @Override
