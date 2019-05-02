@@ -15,7 +15,8 @@ import java.util.List;
 import by.madcat.currencyrateapp.R;
 import by.madcat.currencyrateapp.common.Currency;
 
-import static by.madcat.currencyrateapp.ui.PreferencesActivity.*;
+import static by.madcat.currencyrateapp.ui.PreferencesActivity.APP_PREFERENCES;
+import static by.madcat.currencyrateapp.ui.PreferencesActivity.APP_PREFS_SAVED;
 
 public class PrefsRecyclerViewAdapter extends RecyclerView.Adapter<PrefsCurrencyItemViewHolder> implements ItemTouchHelperAdapter{
 

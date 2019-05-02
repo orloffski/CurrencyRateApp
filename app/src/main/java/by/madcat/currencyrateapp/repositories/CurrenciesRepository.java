@@ -41,6 +41,10 @@ public class CurrenciesRepository {
         currencyLiveData.postValue(currencies);
     }
 
+    public void updateCurrencies(List<Currency> currencies){
+        currencyLiveData.postValue(currencies);
+    }
+
     public boolean isDataLoaded() {
         return dataLoaded;
     }

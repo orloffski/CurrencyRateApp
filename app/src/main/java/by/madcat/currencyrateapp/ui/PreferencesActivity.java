@@ -26,6 +26,7 @@ import by.madcat.currencyrateapp.R;
 import by.madcat.currencyrateapp.common.Currency;
 import by.madcat.currencyrateapp.recyclerviews.PrefsRecyclerViewAdapter;
 import by.madcat.currencyrateapp.recyclerviews.SimpleItemTouchHelperCallback;
+import by.madcat.currencyrateapp.repositories.CurrenciesRepository;
 import by.madcat.currencyrateapp.viewmodel.CurrencyViewModel;
 
 public class PreferencesActivity extends AppCompatActivity {
@@ -117,10 +118,21 @@ public class PreferencesActivity extends AppCompatActivity {
 
     private void saveSettings(){
         gson = new Gson();
-        String jsonText = gson.toJson(adapter.getModifyList());
+
+        List<Currency> currencies = adapter.getModifyList();
+        int i = 0;
+
+        for(Currency currency : currencies){
+            currency.setPosition(i);
+            i++;
+        }
+
+        String jsonText = gson.toJson(currencies);
         SharedPreferences.Editor prefsEditor = mSettings.edit();
         prefsEditor.putBoolean(APP_PREFS_SAVED, true);
         prefsEditor.putString(APP_CURRENCY_PREFS, jsonText);
         prefsEditor.apply();
+
+        CurrenciesRepository.getInstance().updateCurrencies(currencies);
     }
 }
