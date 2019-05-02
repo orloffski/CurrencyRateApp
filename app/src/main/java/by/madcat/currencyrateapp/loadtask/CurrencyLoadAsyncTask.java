@@ -22,8 +22,8 @@ public class CurrencyLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 
     private static CurrencyLoadAsyncTask instance;
 
-    private List<Currency> currenciesLast;
-    private List<Currency> currenciesPrev;
+    private List<Currency> currencyLast;
+    private List<Currency> currencyPrev;
 
     public static Void runCurrencyLoadAsyncTask(Context context){
         if(instance == null) {
@@ -62,6 +62,8 @@ public class CurrencyLoadAsyncTask extends AsyncTask<Void, Void, Void> {
             MessagesRepository.getInstance().updateMessage(e.getMessage());
         }
 
+        combineCurrencies();
+
         CurrenciesRepository.getInstance().setDataLoaded(true);
 
         return null;
@@ -76,8 +78,8 @@ public class CurrencyLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 
     private void loadCurrencies() throws IOException, XmlPullParserException {
         int i = 0;
-        List<Currency> currencyLast = null;
-        List<Currency> currencyPrev = null;
+        currencyLast = null;
+        currencyPrev = null;
 
         while(currencyLast == null){
             currencyLast = GetCurrencyData.getData(AppUtilities.getDateFromInterval(i));
@@ -88,5 +90,20 @@ public class CurrencyLoadAsyncTask extends AsyncTask<Void, Void, Void> {
             currencyPrev = GetCurrencyData.getData(AppUtilities.getDateFromInterval(i));
             i--;
         }
+    }
+
+    private void combineCurrencies(){
+        for (Currency currency : currencyLast) {
+            for(Currency currencyTmp : currencyPrev){
+                if(currency.getCurrencyCode().equalsIgnoreCase(currencyTmp.getCurrencyCode())){
+                    currency.setCurrencyPrevRate(currencyTmp.getCurrencyLastRate());
+                    currency.setPrevDate(currencyTmp.getLastDate());
+                }
+            }
+
+            CurrenciesRepository.getInstance().addCurrency(currency);
+        }
+
+        currencyPrev.clear();
     }
 }

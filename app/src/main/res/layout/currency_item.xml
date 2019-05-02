@@ -38,7 +38,7 @@
                     android:id="@+id/currDescription"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:maxWidth="200dp" />
 
             </LinearLayout>
 
@@ -54,16 +54,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="15dp"
-                    android:paddingEnd="15dp"
-                    android:text="01.05.2019" />
+                    android:paddingEnd="35dp" />
 
                 <TextView
                     android:id="@+id/prevDateTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="15dp"
-                    android:paddingEnd="15dp"
-                    android:text="30.04.2019" />
+                    android:paddingEnd="25dp" />
             </LinearLayout>
 
         </LinearLayout>
