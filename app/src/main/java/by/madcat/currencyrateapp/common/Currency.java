@@ -1,6 +1,6 @@
 package by.madcat.currencyrateapp.common;
 
-public class Currency {
+public class Currency implements Comparable<Currency>{
 
     private int position;
     private boolean include;
@@ -84,16 +84,7 @@ public class Currency {
     }
 
     @Override
-    public String toString() {
-        return "Currency{" +
-                "position=" + position +
-                ", include=" + include +
-                ", CurrencyCode='" + CurrencyCode + '\'' +
-                ", lastDate='" + lastDate + '\'' +
-                ", prevDate='" + prevDate + '\'' +
-                ", CurrencyDescription='" + CurrencyDescription + '\'' +
-                ", CurrencyLastRate='" + CurrencyLastRate + '\'' +
-                ", CurrencyPrevRate='" + CurrencyPrevRate + '\'' +
-                '}';
+    public int compareTo(Currency o) {
+        return Integer.compare(this.position, o.position);
     }
 }
