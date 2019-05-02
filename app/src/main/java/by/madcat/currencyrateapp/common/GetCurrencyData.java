@@ -1,5 +1,7 @@
 package by.madcat.currencyrateapp.common;
 
+import android.icu.text.SimpleDateFormat;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -8,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +50,8 @@ public class GetCurrencyData {
                         if(pullParser.getAttributeCount() == 0)
                             break;
 
-                        currDate = pullParser.getAttributeValue(0);
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+                        currDate = sdf.format(Date.parse(pullParser.getAttributeValue(0)));
                     }else if(pullParser.getName().equalsIgnoreCase(CURRENCY)){
                         currency = new Currency();
                         currency.setLastDate(currDate);
