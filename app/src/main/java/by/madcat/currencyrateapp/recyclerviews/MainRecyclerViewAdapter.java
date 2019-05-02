@@ -14,7 +14,7 @@ import java.util.List;
 import by.madcat.currencyrateapp.R;
 import by.madcat.currencyrateapp.common.Currency;
 
-public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainCyrrencyItemViewHolder> {
+public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainCurrencyItemViewHolder> {
 
     private List<Currency> data;
     private Context context;
@@ -27,13 +27,13 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainCyrrencyIt
     }
 
     @Override
-    public MainCyrrencyItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MainCurrencyItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = layoutInflater.inflate(R.layout.currency_item, parent, false);
-        return new MainCyrrencyItemViewHolder(itemView);
+        return new MainCurrencyItemViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MainCyrrencyItemViewHolder holder, int i) {
+    public void onBindViewHolder(@NonNull MainCurrencyItemViewHolder holder, int i) {
         holder.bind(data.get(i));
     }
 

@@ -8,14 +8,14 @@ import android.widget.TextView;
 import by.madcat.currencyrateapp.R;
 import by.madcat.currencyrateapp.common.Currency;
 
-public class MainCyrrencyItemViewHolder extends RecyclerView.ViewHolder {
+public class MainCurrencyItemViewHolder extends RecyclerView.ViewHolder {
 
     private TextView currCode;
     private TextView currDescription;
     private TextView lastDateTextView;
     private TextView prevDateTextView;
 
-    public MainCyrrencyItemViewHolder(@NonNull View itemView) {
+    public MainCurrencyItemViewHolder(@NonNull View itemView) {
         super(itemView);
 
         currCode = itemView.findViewById(R.id.currCode);
