@@ -73,6 +73,10 @@ public class PrefsRecyclerViewAdapter extends RecyclerView.Adapter<PrefsCurrency
         }
     }
 
+    public List<Currency> getModifyList() {
+        return data;
+    }
+
     class PostDiffCallback extends DiffUtil.Callback {
 
         private final List<Currency> oldCurrencies, newCurrencies;

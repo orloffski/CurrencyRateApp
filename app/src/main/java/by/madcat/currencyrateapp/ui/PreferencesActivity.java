@@ -3,16 +3,23 @@ package by.madcat.currencyrateapp.ui;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.List;
 
 import by.madcat.currencyrateapp.R;
@@ -45,10 +52,45 @@ public class PreferencesActivity extends AppCompatActivity {
         CurrencyViewModel currenciesViewModel = ViewModelProviders.of(this).get(CurrencyViewModel.class);
         currencies = currenciesViewModel.getCurrenciesData().getValue();
 
+        mSettings = PreferenceManager.getDefaultSharedPreferences(this);
+        if(mSettings.getBoolean(APP_PREFS_SAVED, false))
+            initSavedSettings();
+
         initRecyclerView();
 
-        mSettings = getSharedPreferences(APP_PREFERENCES, getApplication().MODE_PRIVATE);
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.prefs_menu, menu);
+        MenuItem save = menu.findItem(R.id.save_settings);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.save_settings:
+                saveSettings();
+
+                return true;
+        }
+        return false;
+    }
+
+    private void initSavedSettings(){
+        List<Currency> settingsCurrencies = loadSettings();
+
+        for(Currency currency : currencies)
+            for(Currency savedCurr : settingsCurrencies)
+                if(currency.getCurrencyCode().equalsIgnoreCase(savedCurr.getCurrencyCode())){
+                    currency.setPosition(savedCurr.getPosition());
+                    currency.setInclude(savedCurr.isInclude());
+                }
+
+        Collections.sort(currencies);
     }
 
     private void initRecyclerView(){
@@ -66,11 +108,19 @@ public class PreferencesActivity extends AppCompatActivity {
         touchHelper.attachToRecyclerView(recyclerView);
     }
 
-    private void loadSettings(){
-
+    private List<Currency> loadSettings(){
+        Gson gson = new Gson();
+        String jsonText = mSettings.getString(APP_CURRENCY_PREFS, null);
+        Type type = new TypeToken<List<Currency>>() {}.getType();
+        return gson.fromJson(jsonText, type);
     }
 
     private void saveSettings(){
-
+        gson = new Gson();
+        String jsonText = gson.toJson(adapter.getModifyList());
+        SharedPreferences.Editor prefsEditor = mSettings.edit();
+        prefsEditor.putBoolean(APP_PREFS_SAVED, true);
+        prefsEditor.putString(APP_CURRENCY_PREFS, jsonText);
+        prefsEditor.apply();
     }
 }

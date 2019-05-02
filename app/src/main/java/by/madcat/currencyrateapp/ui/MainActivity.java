@@ -16,6 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Collections;
+import java.util.List;
+
 import by.madcat.currencyrateapp.R;
 import by.madcat.currencyrateapp.common.AppUtilities;
 import by.madcat.currencyrateapp.common.Currency;
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         CurrencyViewModel currenciesViewModel = ViewModelProviders.of(this).get(CurrencyViewModel.class);
         currenciesViewModel.getCurrenciesData().observe(this, currencies -> {
+            Collections.sort(currencies);
             adapter.setData(currencies);
 
             if(datesLayout.getVisibility() != View.VISIBLE && currencies != null && currencies.size() > 0) {
